@@ -46,7 +46,7 @@ It uses the main sources and compile classpath of the project when invoking Enun
 The task can be configured with these options:
 
 Option | Default value | Description
--------|-----------------------------
+-------|---------------|-------------
 buildDirName	| enunciate							| Enunciate's tmp dir, relative to Gradle's buildDir
 configFileName	| src/main/enunciate/enunciate.xml	| Location of enunciate configuration file.
 extraJavacArgs	| []								| Javac arguments. Arguments for source, target, encoding and bootstrapClasspath are added automatically.
