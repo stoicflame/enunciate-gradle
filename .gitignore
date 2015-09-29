@@ -6,6 +6,7 @@
 .ant-targets-build-site.xml
 target
 cargo-installs
+.gradle/
 .project
 .settings/
 .classpath
