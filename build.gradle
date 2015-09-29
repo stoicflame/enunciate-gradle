@@ -14,7 +14,6 @@ dependencies {
 	
 	compile "com.webcohesion.enunciate:enunciate-core:2.0.0-RC.1"
 	compile "com.webcohesion.enunciate:enunciate-docs:2.0.0-RC.1"
-//	compile "com.webcohesion.enunciate:enunciate-jackson:2.0.0-RC.1"
 }
 
 eclipse {
@@ -29,7 +28,7 @@ group = "com.webcohesion.enunciate"
 
 pluginBundle {
 	website = 'http://enunciate.webcohesion.com/'
-	vcsUrl = 'https://github.com/stoicflame/enunciate'
+	vcsUrl = 'https://github.com/stoicflame/enunciate-gradle'
 	description = 'A gradle plugin for generating documentation with Enunciate'
 	tags = ['enunciate', 'documentation']
 	

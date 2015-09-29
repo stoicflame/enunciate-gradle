@@ -11,3 +11,4 @@ cargo-installs
 .settings/
 .classpath
 bin/
+build/
