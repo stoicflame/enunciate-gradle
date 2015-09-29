@@ -1,0 +1,42 @@
+plugins {
+  id "com.gradle.plugin-publish" version "0.9.1"
+}
+
+apply plugin: "java"
+apply plugin: "eclipse"
+
+repositories {
+	jcenter()
+}
+
+dependencies {
+	compile gradleApi()
+	
+	compile "com.webcohesion.enunciate:enunciate-core:2.0.0-RC.1"
+	compile "com.webcohesion.enunciate:enunciate-docs:2.0.0-RC.1"
+//	compile "com.webcohesion.enunciate:enunciate-jackson:2.0.0-RC.1"
+}
+
+eclipse {
+	jdt {
+		sourceCompatibility = "1.7"
+		targetCompatibility = "1.7"
+	}
+}
+
+version = "0.9.0"
+group = "com.webcohesion.enunciate"
+
+pluginBundle {
+	website = 'http://enunciate.webcohesion.com/'
+	vcsUrl = 'https://github.com/stoicflame/enunciate'
+	description = 'A gradle plugin for generating documentation with Enunciate'
+	tags = ['enunciate', 'documentation']
+	
+	plugins {
+		enunciatePlugin {
+			id = 'com.webcohesion.enunciate'
+			displayName = 'Gradle Enunciate plugin'
+		}
+	}
+}
