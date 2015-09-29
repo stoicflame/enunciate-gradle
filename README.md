@@ -46,7 +46,7 @@ It uses the main sources and compile classpath of the project when invoking Enun
 The task can be configured with these options:
 
 Option | Default value | Description
--------------------------------------
+-------|-----------------------------
 buildDirName	| enunciate							| Enunciate's tmp dir, relative to Gradle's buildDir
 configFileName	| src/main/enunciate/enunciate.xml	| Location of enunciate configuration file.
 extraJavacArgs	| []								| Javac arguments. Arguments for source, target, encoding and bootstrapClasspath are added automatically.
@@ -54,7 +54,7 @@ extraJavacArgs	| []								| Javac arguments. Arguments for source, target, enco
 The task can be further configured with these methods:
 
 Method | Operation
-------------------------
+-------|----------------
 exclude(pattern) | Excludes files matching pattern from sources.
 include(pattern) | Includes files matching pattern from sources (implicitly excluding those that do not match).
 export(artifactId, destination) | Defines an artifact export (see https://github.com/stoicflame/enunciate/wiki/Artifacts). If the destination is a folder, the output is generated there. Otherwise the output is put in an archive.
