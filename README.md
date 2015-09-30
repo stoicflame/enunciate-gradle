@@ -25,10 +25,10 @@ buildscript {
   }
   dependencies {
     classpath files("PATH_TO_YOUR_WORKSPACE/enunciate-gradle/build/libs/enunciate-gradle-0.9.0.jar")
-    classpath "com.webcohesion.enunciate:enunciate-core:2.0.0-RC.1"
-    classpath "com.webcohesion.enunciate:enunciate-docs:2.0.0-RC.1"
-    classpath "com.webcohesion.enunciate:enunciate-jaxb:2.0.0-RC.1"
-    classpath "com.webcohesion.enunciate:enunciate-jaxrs:2.0.0-RC.1"
+    classpath "com.webcohesion.enunciate:enunciate-core:2.0.0"
+    classpath "com.webcohesion.enunciate:enunciate-docs:2.0.0"
+    classpath "com.webcohesion.enunciate:enunciate-jaxb:2.0.0"
+    classpath "com.webcohesion.enunciate:enunciate-jaxrs:2.0.0"
   }
 }
 apply plugin: "com.webcohesion.enunciate"

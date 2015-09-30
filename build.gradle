@@ -12,8 +12,8 @@ repositories {
 dependencies {
 	compile gradleApi()
 	
-	compile "com.webcohesion.enunciate:enunciate-core:2.0.0-RC.1"
-	compile "com.webcohesion.enunciate:enunciate-docs:2.0.0-RC.1"
+	compile "com.webcohesion.enunciate:enunciate-core:2.0.0"
+	compile "com.webcohesion.enunciate:enunciate-docs:2.0.0"
 }
 
 eclipse {
