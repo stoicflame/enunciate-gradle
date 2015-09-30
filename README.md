@@ -16,7 +16,7 @@ Until this is done, you can clone this project, and run the command
 gradlew jar
 ```
 
-This will generate `build\libs\enunciate-gradle-0.9.0.jar` which can be included in a build file like this:
+This will generate `build/libs/enunciate-gradle-0.9.0.jar` which can be included in a build file like this:
 
 ```
 buildscript {
@@ -29,9 +29,9 @@ buildscript {
     classpath "com.webcohesion.enunciate:enunciate-docs:2.0.0-RC.1"
     classpath "com.webcohesion.enunciate:enunciate-jaxb:2.0.0-RC.1"
     classpath "com.webcohesion.enunciate:enunciate-jaxrs:2.0.0-RC.1"
-	}
+  }
 }
-apply plugin: "enunciate"
+apply plugin: "com.webcohesion.enunciate"
 ```
 
 The above allows generation of documentation for a REST based XML API.
@@ -65,7 +65,7 @@ export(artifactId, destination) | Defines an artifact export (see https://github
 This will generate the documentation artifact and copy it to the dist/docs/api folder.
 
 ```
-apply plugin: "enunciate"
+apply plugin: "com.webcohesion.enunciate"
 	   
 tasks.enunciate {
   File enunciateDistDir = file("dist/docs/api")
