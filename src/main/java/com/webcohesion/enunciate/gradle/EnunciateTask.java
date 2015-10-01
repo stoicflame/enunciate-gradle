@@ -65,14 +65,7 @@ public class EnunciateTask extends DefaultTask {
 		log = getLogger();
 
 		javaPluginConvention = getProject().getConvention().findPlugin(JavaPluginConvention.class);
-		if (javaPluginConvention != null) {
-			setup();
-		} else {
-			log.debug("Enunciate disabled as did not find java plugin");
-		}
-	}
-	
-	private void setup() {
+
 		TaskDependency buildDependencies = getProject().getConfigurations().getByName("compile").getBuildDependencies();
 		dependsOn(buildDependencies);
 		

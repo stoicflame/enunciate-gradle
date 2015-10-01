@@ -19,9 +19,12 @@ package com.webcohesion.enunciate.gradle;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.plugins.JavaPluginConvention;
 
 /**
  * Enunciate plugin.
+ * 
+ * Requires Java plugin to be already applied before it can activate.
  * 
  * @author Jesper Skov
  */
@@ -29,6 +32,10 @@ public class EnunciatePlugin implements Plugin<Project> {
 
 	@Override
 	public void apply(Project project) {
-		project.getTasks().create("enunciate", EnunciateTask.class);
+		
+		JavaPluginConvention javaPluginConvention = project.getConvention().findPlugin(JavaPluginConvention.class);
+		if (javaPluginConvention != null) {
+			project.getTasks().create("enunciate", EnunciateTask.class);
+		}
 	}
 }

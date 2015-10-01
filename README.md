@@ -8,17 +8,37 @@ If you experience any issues with the plugin, please file and issue at github, h
 
 ## Applying the plugin
 
+Use the plugin mechanism (Gradle 2.1+) to load the plugin:
+
+```
+plugins {
+  id "com.webcohesion.enunciate" version "0.9.1"
+}
+```
+
+Or for older Gradle versions:
+
 ```
 buildscript {
   repositories {
     jcenter()
   }
   dependencies {
-    classpath "gradle.plugin.com.webcohesion.enunciate:enunciate-gradle:0.9.0")
+    classpath "gradle.plugin.com.webcohesion.enunciate:enunciate-gradle:0.9.1")
   }
 }
+```
+
+The apply the plugin. Note that it will only work in projects where the java plugin has already been applied.
+
+```
+apply plugin: "java"
+...
 apply plugin: "com.webcohesion.enunciate"
 ```
+
+
+
 
 The above allows generation of documentation for a REST-based XML API. You may want to include [other Enunciate modules](https://github.com/stoicflame/enunciate/wiki/Modules) to handle JSON, to generate client-side libraries, or to generate Swagger documentation. For information about the other modules available, see [Enunciate Modules](https://github.com/stoicflame/enunciate/wiki/Modules).
 
