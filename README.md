@@ -26,7 +26,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "gradle.plugin.com.webcohesion.enunciate:enunciate-gradle:0.9.1")
+    classpath "gradle.plugin.com.webcohesion.enunciate:enunciate-gradle:0.9.1"
   }
 }
 ```
