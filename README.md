@@ -21,7 +21,9 @@ Or for older Gradle versions:
 ```
 buildscript {
   repositories {
-    jcenter()
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
   }
   dependencies {
     classpath "gradle.plugin.com.webcohesion.enunciate:enunciate-gradle:0.9.1")
