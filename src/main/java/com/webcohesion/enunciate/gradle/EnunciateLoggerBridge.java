@@ -24,7 +24,7 @@ import com.webcohesion.enunciate.EnunciateLogger;
 /**
  * Bridge Enunciate log output to Gradle logger.
  *  
- * @author Jesper Skov <jskov@jyskebank.dk>
+ * @author Jesper Skov
  */
 public class EnunciateLoggerBridge implements EnunciateLogger {
 	private Logger gradleLogger;

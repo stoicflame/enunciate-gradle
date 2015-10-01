@@ -23,7 +23,7 @@ import org.gradle.api.Project;
 /**
  * Enunciate plugin.
  * 
- * @author Jesper Skov <jskov@jyskebank.dk>
+ * @author Jesper Skov
  */
 public class EnunciatePlugin implements Plugin<Project> {
 

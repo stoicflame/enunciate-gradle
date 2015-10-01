@@ -48,7 +48,7 @@ import com.webcohesion.enunciate.Enunciate;
  * Provides Gradle DSL for configuration of the Enunciate API.
  * Only Java / Docs output tested at this time.
  * 
- * @author Jesper Skov <jskov@jyskebank.dk>
+ * @author Jesper Skov
  */
 public class EnunciateTask extends DefaultTask {
 	public String buildDirName = "enunciate";
