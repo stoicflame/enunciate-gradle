@@ -107,6 +107,10 @@ public class EnunciateTask extends DefaultTask {
 
 	@TaskAction
 	public void run() {
+		if (!getConfigFile().exists()) {
+			log.info("Enunciate task did nothing - did not find cofiguration file {}", getConfigFile());
+		}
+		
 		Set<File> inputFiles = getMatchingSourceFiles().getFiles();
 		
 		Enunciate enunciate = new Enunciate();
