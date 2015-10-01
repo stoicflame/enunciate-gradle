@@ -15,10 +15,6 @@ buildscript {
   }
   dependencies {
     classpath "gradle.plugin.com.webcohesion.enunciate:enunciate-gradle:0.9.0")
-    classpath "com.webcohesion.enunciate:enunciate-core:2.0.0"
-    classpath "com.webcohesion.enunciate:enunciate-docs:2.0.0"
-    classpath "com.webcohesion.enunciate:enunciate-jaxb:2.0.0"
-    classpath "com.webcohesion.enunciate:enunciate-jaxrs:2.0.0"
   }
 }
 apply plugin: "com.webcohesion.enunciate"
