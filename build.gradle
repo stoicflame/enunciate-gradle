@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
 	compile gradleApi()
-	
+
 	compile "com.webcohesion.enunciate:enunciate-top:2.0.0"
 }
 
@@ -22,7 +22,7 @@ eclipse {
 	}
 }
 
-version = "0.9.1"
+version = "2.0.0"
 group = "com.webcohesion.enunciate"
 
 pluginBundle {
@@ -30,7 +30,7 @@ pluginBundle {
 	vcsUrl = 'https://github.com/stoicflame/enunciate-gradle'
 	description = 'A gradle plugin for generating documentation with Enunciate'
 	tags = ['enunciate', 'documentation']
-	
+
 	plugins {
 		enunciatePlugin {
 			id = 'com.webcohesion.enunciate'

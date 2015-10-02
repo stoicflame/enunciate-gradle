@@ -1,6 +1,6 @@
 # Enunciate Gradle Plugin
 
-Gradle plugin for generating REST/WS documentation for Java projects using [Enunciate](http://enunciate.webcohesion.com).
+Gradle plugin for generating documentation for Java-based Web service API projects using [Enunciate](http://enunciate.webcohesion.com).
 
 ## Issues
 
@@ -8,15 +8,18 @@ If you experience any issues with the plugin, please file and issue at github, h
 
 ## Applying the plugin
 
-Use the plugin mechanism (Gradle 2.1+) to load the plugin:
+
+### Gradle 2.1+
+
+Use the plugin mechanism to load the plugin:
 
 ```
 plugins {
-  id "com.webcohesion.enunciate" version "0.9.1"
+  id "com.webcohesion.enunciate" version "2.0.0"
 }
 ```
 
-Or for older Gradle versions:
+### Older Gradle versions
 
 ```
 buildscript {
@@ -26,24 +29,18 @@ buildscript {
     }
   }
   dependencies {
-    classpath "gradle.plugin.com.webcohesion.enunciate:enunciate-gradle:0.9.1"
+    classpath "gradle.plugin.com.webcohesion.enunciate:enunciate-gradle:2.0.0"
   }
 }
 ```
 
-The apply the plugin. Note that it will only work in projects where the java plugin has already been applied.
+To apply the plugin (note that it will only work in projects where the java plugin has already been applied):
 
 ```
 apply plugin: "java"
 ...
 apply plugin: "com.webcohesion.enunciate"
 ```
-
-
-
-
-The above allows generation of documentation for a REST-based XML API. You may want to include [other Enunciate modules](https://github.com/stoicflame/enunciate/wiki/Modules) to handle JSON, to generate client-side libraries, or to generate Swagger documentation. For information about the other modules available, see [Enunciate Modules](https://github.com/stoicflame/enunciate/wiki/Modules).
-
 
 ## Enunciate Task
 
