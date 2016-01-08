@@ -36,11 +36,9 @@ buildscript {
 }
 ```
 
-To apply the plugin (note that it will only work in projects where the java plugin has already been applied):
+To apply the plugin:
 
 ```
-apply plugin: "java"
-...
 apply plugin: "com.webcohesion.enunciate"
 ```
 
