@@ -19,6 +19,8 @@ plugins {
 }
 ```
 
+NOTE: this appears to be broken. Use the method below.
+
 ### Older Gradle versions
 
 ```
