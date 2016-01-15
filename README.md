@@ -11,8 +11,6 @@ If you experience any issues with the plugin, please file and issue at github, h
 
 ### Gradle 2.1+
 
-**This is broken in version 2.1.1, use the construct for older Gradle versions instead (#4)**
-
 Use the plugin mechanism to load the plugin:
 
 ```
@@ -77,4 +75,10 @@ tasks.enunciate {
   }
   export("docs", enunciateDistDir)
 }
+```
+
+As a workaround for enunciate-gradle#5 you might want to add:
+
+```
+tasks.enunciate.doFirst { project.delete("build/enunciate") }
 ```
