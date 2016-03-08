@@ -51,8 +51,8 @@ import com.webcohesion.enunciate.Enunciate;
  * @author Jesper Skov
  */
 public class EnunciateTask extends DefaultTask {
-	public String buildDirName = "enunciate";
-	public String configFileName = "src/main/enunciate/enunciate.xml";
+	private String buildDirName = "enunciate";
+	private String configFileName = "src/main/enunciate/enunciate.xml";
 	
 	private Logger log;
 	private PatternFilterable filter = new PatternSet();
@@ -104,6 +104,22 @@ public class EnunciateTask extends DefaultTask {
 	public void setExtraJavacArgs(List<String> extraJavacArgs) {
 		this.extraJavacArgs = extraJavacArgs;
 	}
+	
+	public String getBuildDirName() {
+		return buildDirName;
+	}
+
+	public void setBuildDirName(String buildDirName) {
+		this.buildDirName = buildDirName;
+	}
+
+	public String getConfigFileName() {
+		return configFileName;
+	}
+
+	public void setConfigFileName(String configFileName) {
+		this.configFileName = configFileName;
+	}
 
 	@TaskAction
 	public void run() {
@@ -117,7 +133,7 @@ public class EnunciateTask extends DefaultTask {
 		enunciate.setLogger(new EnunciateLoggerBridge(log));
 		enunciate.setBuildDir(getBuildDir());
 		enunciate.setSourceFiles(inputFiles);
-		enunciate.setClasspath(new ArrayList<>(mainSourceSet.getCompileClasspath().getFiles()));
+		enunciate.setClasspath(getClasspathJars());
 		enunciate.getCompilerArgs().addAll(buildCompilerArgs(javaPluginConvention));
 		enunciate.getCompilerArgs().addAll(extraJavacArgs);
 		
@@ -134,6 +150,17 @@ public class EnunciateTask extends DefaultTask {
 		
 		enunciate.run();
 	}
+
+	// Filters out .pom files which may appear when BOMs are used
+	private ArrayList<File> getClasspathJars() {
+		ArrayList<File> classpathJars = new ArrayList<>();
+		for (File f : mainSourceSet.getCompileClasspath().getFiles()) {
+			if (!f.getName().endsWith(".pom")) {
+				classpathJars.add(f);
+			}
+		}
+		return classpathJars;
+	}
 	
 	private List<String> buildCompilerArgs(JavaPluginConvention javaPluginConvention) {
 		TaskCollection<JavaCompile> javaCompilers = getProject().getTasks().withType(JavaCompile.class);
@@ -143,10 +170,12 @@ public class EnunciateTask extends DefaultTask {
 							 							  "-target", javaPluginConvention.getTargetCompatibility().toString(),
 							 							  "-encoding", getDefaultOrCompilerEncoding(firstCompilerOptions)));
 
-		String bootClasspath = firstCompilerOptions.getBootClasspath();
-		if (bootClasspath != null) {
-			args.add("-bootclasspath");
-			args.add(bootClasspath);
+		if (firstCompilerOptions != null) {
+			String bootClasspath = firstCompilerOptions.getBootClasspath();
+			if (bootClasspath != null) {
+				args.add("-bootclasspath");
+				args.add(bootClasspath);
+			}
 		}
 		
 		return args;
@@ -164,6 +193,7 @@ public class EnunciateTask extends DefaultTask {
 	
 	private Callable<FileTree> lazyGetMatchingSourceFiles() {
 		return new Callable<FileTree>() {
+			@Override
 			public FileTree call() {
 				return getMatchingSourceFiles();
 			}
@@ -171,7 +201,8 @@ public class EnunciateTask extends DefaultTask {
 	}
 
 	private Callable<File> lazyGetConfigFile() {
-		return new Callable<File>() { 
+		return new Callable<File>() {
+			@Override
 			public File call() {
 				return getConfigFile();
 			}
@@ -179,7 +210,8 @@ public class EnunciateTask extends DefaultTask {
 	}
 
 	private Callable<File> lazyGetBuildDir() {
-		return new Callable<File>() { 
+		return new Callable<File>() {
+			@Override
 			public File call() {
 				return getBuildDir();
 			}
