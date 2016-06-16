@@ -59,7 +59,7 @@ Method | Operation
 exclude(pattern) | Excludes files matching pattern from sources.
 include(pattern) | Includes files matching pattern from sources (implicitly excluding those that do not match).
 export(artifactId, destination) | Defines an artifact export (see https://github.com/stoicflame/enunciate/wiki/Artifacts). If the destination is a folder, the output is generated there. Otherwise the output is put in a zip file.
-
+sourcepath(Object...) | Adds additional source paths. The given paths are evaluated as per Project.files(Object...). 
 ## Example usage
 
 This will generate the documentation artifact and copy it to the dist/docs/api folder.

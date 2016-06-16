@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 
 import org.gradle.api.DefaultTask;
+import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.plugins.JavaPluginConvention;
@@ -60,6 +61,7 @@ public class EnunciateTask extends DefaultTask {
 	private SourceSet mainSourceSet;
 	private JavaPluginConvention javaPluginConvention;
 	private List<String> extraJavacArgs = new ArrayList<>();
+	private ConfigurableFileCollection sourcePath;
 	
 	public EnunciateTask() {
 		log = getLogger();
@@ -70,6 +72,7 @@ public class EnunciateTask extends DefaultTask {
 		dependsOn(buildDependencies);
 		
 		mainSourceSet = javaPluginConvention.getSourceSets().findByName("main");
+		sourcePath = getProject().files();
 		
 		getInputs().file(lazyGetMatchingSourceFiles());
 		getInputs().file(lazyGetConfigFile());
@@ -89,6 +92,10 @@ public class EnunciateTask extends DefaultTask {
 		exports.put(id, destination);
 	}
 
+	public void sourcepath(Object... sourcePaths) {
+		sourcePath.from(sourcePaths);
+	}
+	
 	public File getBuildDir() {
 		return new File(getProject().getBuildDir(), buildDirName);
 	}
@@ -136,6 +143,10 @@ public class EnunciateTask extends DefaultTask {
 		enunciate.setClasspath(getClasspathJars());
 		enunciate.getCompilerArgs().addAll(buildCompilerArgs(javaPluginConvention));
 		enunciate.getCompilerArgs().addAll(extraJavacArgs);
+		
+		ArrayList<File> sourcePathArg = new ArrayList<>(sourcePath.getFiles());
+		log.info("Adding sourcepath {}", sourcePathArg);
+		enunciate.setSourcepath(sourcePathArg);
 		
 		log.info("Using config {}", getConfigFile());
 		enunciate.loadConfiguration(getConfigFile());
