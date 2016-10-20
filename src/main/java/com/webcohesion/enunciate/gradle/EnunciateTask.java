@@ -35,7 +35,6 @@ import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.TaskCollection;
-import org.gradle.api.tasks.TaskDependency;
 import org.gradle.api.tasks.compile.CompileOptions;
 import org.gradle.api.tasks.compile.JavaCompile;
 import org.gradle.api.tasks.util.PatternFilterable;
@@ -68,8 +67,7 @@ public class EnunciateTask extends DefaultTask {
 
 		javaPluginConvention = getProject().getConvention().findPlugin(JavaPluginConvention.class);
 
-		TaskDependency buildDependencies = getProject().getConfigurations().getByName("compile").getBuildDependencies();
-		dependsOn(buildDependencies);
+		dependsOn(getProject().getConfigurations().getByName("compile"));
 		
 		mainSourceSet = javaPluginConvention.getSourceSets().findByName("main");
 		sourcePath = getProject().files();
@@ -78,7 +76,7 @@ public class EnunciateTask extends DefaultTask {
 		getInputs().file(lazyGetConfigFile());
 		getOutputs().dir(lazyGetBuildDir());
 	}
-	
+
 	public void exclude(String pattern) {
 		filter.exclude(pattern);
 	}
