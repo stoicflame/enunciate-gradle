@@ -15,7 +15,7 @@ Use the plugin mechanism to load the plugin:
 
 ```
 plugins {
-  id "com.webcohesion.enunciate" version "2.6.0"
+  id "com.webcohesion.enunciate" version "2.7.0"
 }
 ```
 
@@ -29,7 +29,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "gradle.plugin.com.webcohesion.enunciate:enunciate-gradle:2.6.0"
+    classpath "gradle.plugin.com.webcohesion.enunciate:enunciate-gradle:2.7.0"
   }
 }
 ```
