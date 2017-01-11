@@ -67,7 +67,7 @@ public class EnunciateTask extends DefaultTask {
 
 		javaPluginConvention = getProject().getConvention().findPlugin(JavaPluginConvention.class);
 
-		dependsOn(getProject().getConfigurations().getByName("compile"));
+		dependsOn(getProject().getTasks().getByName("classes"));
 		
 		mainSourceSet = javaPluginConvention.getSourceSets().findByName("main");
 		sourcePath = getProject().files();
