@@ -12,7 +12,7 @@ repositories {
 dependencies {
 	compile gradleApi()
 
-	compile "com.webcohesion.enunciate:enunciate-top:2.9.0"
+	compile "com.webcohesion.enunciate:enunciate-top:2.9.1"
 }
 
 eclipse {
@@ -22,7 +22,7 @@ eclipse {
 	}
 }
 
-version = "2.9.0"
+version = "2.9.1"
 group = "com.webcohesion.enunciate"
 
 pluginBundle {
