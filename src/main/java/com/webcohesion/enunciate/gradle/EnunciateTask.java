@@ -160,11 +160,11 @@ public class EnunciateTask extends DefaultTask {
 		enunciate.run();
 	}
 
-	// Filters out .pom files which may appear when BOMs are used
+	// Filters out .pom files which may appear when BOMs are used, as well as others like .orbit
 	private ArrayList<File> getClasspathJars() {
 		ArrayList<File> classpathJars = new ArrayList<>();
 		for (File f : mainSourceSet.getCompileClasspath().getFiles()) {
-			if (!f.getName().endsWith(".pom")) {
+			if (f.getName().endsWith(".jar")) {
 				classpathJars.add(f);
 			}
 		}
