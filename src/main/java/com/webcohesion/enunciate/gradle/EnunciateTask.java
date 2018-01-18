@@ -73,7 +73,7 @@ public class EnunciateTask extends DefaultTask {
 		mainSourceSet = javaPluginConvention.getSourceSets().findByName("main");
 		sourcePath = getProject().files();
 		
-		getInputs().file(lazyGetMatchingSourceFiles());
+		getInputs().files(lazyGetMatchingSourceFiles());
 		getInputs().file(lazyGetConfigFile());
 		getOutputs().dir(lazyGetBuildDir());
 	}
