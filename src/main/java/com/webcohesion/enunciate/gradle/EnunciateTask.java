@@ -29,6 +29,7 @@ import java.util.concurrent.Callable;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.ConfigurableFileCollection;
+import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.plugins.JavaPluginConvention;
@@ -180,10 +181,10 @@ public class EnunciateTask extends DefaultTask {
 							 							  "-encoding", getDefaultOrCompilerEncoding(firstCompilerOptions)));
 
 		if (firstCompilerOptions != null) {
-			String bootClasspath = firstCompilerOptions.getBootClasspath();
+			FileCollection bootClasspath = firstCompilerOptions.getBootstrapClasspath();
 			if (bootClasspath != null) {
 				args.add("-bootclasspath");
-				args.add(bootClasspath);
+				args.add(bootClasspath.getAsPath());
 			}
 		}
 		
