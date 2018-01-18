@@ -1,9 +1,14 @@
 plugins {
   id "com.gradle.plugin-publish" version "0.9.9"
+  id 'java-gradle-plugin'
 }
 
 apply plugin: "java"
 apply plugin: "eclipse"
+
+ext {
+	pluginId = 'com.webcohesion.enunciate'
+}
 
 repositories {
 	mavenCentral()
@@ -33,8 +38,17 @@ pluginBundle {
 
 	plugins {
 		enunciatePlugin {
-			id = 'com.webcohesion.enunciate'
+			id = pluginId
 			displayName = 'Gradle Enunciate plugin'
 		}
 	}
+}
+
+gradlePlugin {
+    plugins {
+        simplePlugin {
+            id = pluginId
+            implementationClass = 'com.webcohesion.enunciate.gradle.EnunciatePlugin'
+        }
+    }
 }
