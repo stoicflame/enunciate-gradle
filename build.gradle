@@ -20,12 +20,8 @@ dependencies {
 	compile "com.webcohesion.enunciate:enunciate-top:2.10.1"
 }
 
-eclipse {
-	jdt {
-		sourceCompatibility = "1.7"
-		targetCompatibility = "1.7"
-	}
-}
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
 
 version = "2.10.1"
 group = "com.webcohesion.enunciate"
