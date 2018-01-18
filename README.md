@@ -49,6 +49,7 @@ The task can be configured with these options:
 Option | Default value | Description
 -------|---------------|-------------
 buildDirName | enunciate | Enunciate's working directory, relative to Gradle's `buildDir`
+classpathConfigName | compileClasspath | This configuration's files are passed on as classpath to the Enunciate compilation.
 configFileName | src/main/enunciate/enunciate.xml	| Location of enunciate configuration file.
 extraJavacArgs | [] | Javac arguments. Arguments for source, target, encoding and bootstrapClasspath are added automatically.
 

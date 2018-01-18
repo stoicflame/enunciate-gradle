@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.ConfigurableFileCollection;
@@ -33,6 +34,8 @@ import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.plugins.JavaPluginConvention;
+import org.gradle.api.provider.Property;
+import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.TaskCollection;
@@ -54,7 +57,7 @@ import com.webcohesion.enunciate.Enunciate;
 public class EnunciateTask extends DefaultTask {
 	private String buildDirName = "enunciate";
 	private String configFileName = "src/main/enunciate/enunciate.xml";
-	
+	private Property<String> classpathConfigName;
 	private Logger log;
 	private PatternFilterable filter = new PatternSet();
 	private Map<String, File> exports = new HashMap<>();
@@ -66,6 +69,9 @@ public class EnunciateTask extends DefaultTask {
 	public EnunciateTask() {
 		log = getLogger();
 
+		classpathConfigName = getProject().getObjects().property(String.class);
+		classpathConfigName.set("compileClasspath");
+		
 		javaPluginConvention = getProject().getConvention().findPlugin(JavaPluginConvention.class);
 
 		dependsOn(getProject().getTasks().getByName("classes"));
@@ -78,6 +84,18 @@ public class EnunciateTask extends DefaultTask {
 		getOutputs().dir(lazyGetBuildDir());
 	}
 
+	public void setClasspathConfigName(Provider<String> configNameProvider) {
+		classpathConfigName.set(configNameProvider);
+	}
+	
+	public void setClasspathConfigName(String configName) {
+		classpathConfigName.set(configName);
+	}
+	
+	public String getClasspathConfigName() {
+		return classpathConfigName.get();
+	}
+	
 	public void exclude(String pattern) {
 		filter.exclude(pattern);
 	}
@@ -162,14 +180,12 @@ public class EnunciateTask extends DefaultTask {
 	}
 
 	// Filters out .pom files which may appear when BOMs are used
-	private ArrayList<File> getClasspathJars() {
-		ArrayList<File> classpathJars = new ArrayList<>();
-		for (File f : mainSourceSet.getCompileClasspath().getFiles()) {
-			if (!f.getName().endsWith(".pom")) {
-				classpathJars.add(f);
-			}
-		}
-		return classpathJars;
+	private List<File> getClasspathJars() {
+		return getProject().getConfigurations().getByName(classpathConfigName.get())
+				.getFiles()
+				.stream()
+				.filter(f -> !f.getName().endsWith(".pom"))
+				.collect(Collectors.toList());
 	}
 	
 	private List<String> buildCompilerArgs(JavaPluginConvention javaPluginConvention) {
