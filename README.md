@@ -8,6 +8,12 @@ If you experience any issues with the plugin, please file and issue at github, h
 
 ## Applying the plugin
 
+The plugin has been compiled with Java 8, on Gradle 4.4.
+
+So your build process needs to run on Java 8.
+
+The plugin may work on older versions of Gradle.
+
 
 ### Gradle 2.1+
 
