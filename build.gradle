@@ -48,3 +48,5 @@ gradlePlugin {
         }
     }
 }
+
+tasks['eclipse'].dependsOn("cleanEclipseClasspath", "pluginUnderTestMetadata")
