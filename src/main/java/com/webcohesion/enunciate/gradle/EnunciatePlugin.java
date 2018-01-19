@@ -19,6 +19,7 @@ package com.webcohesion.enunciate.gradle;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.plugins.JavaPlugin;
 
 /**
@@ -29,10 +30,15 @@ import org.gradle.api.plugins.JavaPlugin;
  * @author Jesper Skov
  */
 public class EnunciatePlugin implements Plugin<Project> {
+	
 	@Override
 	public void apply(Project project) {
+		project.getLogger().lifecycle("Loading plugin enunciate from {}", project.getName());
 		project.getPlugins().apply(JavaPlugin.class);
 
-		project.getTasks().create("enunciate", EnunciateTask.class);
+		Configuration configuration = project.getConfigurations().maybeCreate("enunciate");
+		
+		EnunciateTask task = project.getTasks().create("enunciate", EnunciateTask.class);
+		task.setEnunciateModuleConfig(configuration);
 	}
 }

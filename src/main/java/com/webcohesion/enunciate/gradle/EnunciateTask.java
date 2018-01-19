@@ -18,17 +18,22 @@
 package com.webcohesion.enunciate.gradle;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
 import org.gradle.api.DefaultTask;
+import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
@@ -45,6 +50,7 @@ import org.gradle.api.tasks.util.PatternFilterable;
 import org.gradle.api.tasks.util.PatternSet;
 
 import com.webcohesion.enunciate.Enunciate;
+import com.webcohesion.enunciate.module.EnunciateModule;
 
 /**
  * Enunciate task.
@@ -65,6 +71,7 @@ public class EnunciateTask extends DefaultTask {
 	private JavaPluginConvention javaPluginConvention;
 	private List<String> extraJavacArgs = new ArrayList<>();
 	private ConfigurableFileCollection sourcePath;
+	private Configuration enunciateModuleConfiguration;
 	
 	public EnunciateTask() {
 		log = getLogger();
@@ -151,6 +158,31 @@ public class EnunciateTask extends DefaultTask {
 			log.info("Enunciate task did nothing - did not find cofiguration file {}", getConfigFile());
 		}
 		
+		List<URL> moduleUrls = enunciateModuleConfiguration.getFiles().stream()
+			.map(this::fileToUrl)
+			.collect(Collectors.toList());
+		URL[] moduleUrlsArray = moduleUrls.toArray(new URL[moduleUrls.size()]);
+		
+		ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+		try (URLClassLoader moduleClassloader = new URLClassLoader(moduleUrlsArray, contextClassLoader)) {
+			Thread.currentThread().setContextClassLoader(moduleClassloader);
+
+			printFoundEnunciateModules();
+			configureAndInvokeEnunciate();
+		} catch (Exception e) {
+			throw new IllegalStateException("Failed to invoke Enunciate", e);
+		} finally {
+			Thread.currentThread().setContextClassLoader(contextClassLoader);
+		}
+	}
+
+	private void printFoundEnunciateModules() {
+		ServiceLoader<EnunciateModule> moduleLoader = ServiceLoader.load(EnunciateModule.class);
+		log.info("Modules:");
+		moduleLoader.forEach(em -> log.info(" {}", em));
+	}
+
+	private void configureAndInvokeEnunciate() {
 		Set<File> inputFiles = getMatchingSourceFiles().getFiles();
 		
 		Enunciate enunciate = new Enunciate();
@@ -177,6 +209,14 @@ public class EnunciateTask extends DefaultTask {
 		}
 		
 		enunciate.run();
+	}
+
+	private URL fileToUrl(File f) {
+		try {
+			return f.toURI().toURL();
+		} catch (MalformedURLException e) {
+			throw new IllegalStateException("Bad file->URL conversion for " + f, e);
+		}
 	}
 
 	// Filters out .pom files which may appear when BOMs are used
@@ -218,29 +258,18 @@ public class EnunciateTask extends DefaultTask {
 	}
 	
 	private Callable<FileTree> lazyGetMatchingSourceFiles() {
-		return new Callable<FileTree>() {
-			@Override
-			public FileTree call() {
-				return getMatchingSourceFiles();
-			}
-		};
+		return this::getMatchingSourceFiles;
 	}
 
 	private Callable<File> lazyGetConfigFile() {
-		return new Callable<File>() {
-			@Override
-			public File call() {
-				return getConfigFile();
-			}
-		};
+		return this::getConfigFile;
 	}
 
 	private Callable<File> lazyGetBuildDir() {
-		return new Callable<File>() {
-			@Override
-			public File call() {
-				return getBuildDir();
-			}
-		};
+		return this::getBuildDir;
+	}
+
+	public void setEnunciateModuleConfig(Configuration configuration) {
+		enunciateModuleConfiguration = configuration;
 	}
 }

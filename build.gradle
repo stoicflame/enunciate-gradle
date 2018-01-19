@@ -16,7 +16,6 @@ repositories {
 
 dependencies {
 	compile gradleApi()
-
 	compile "com.webcohesion.enunciate:enunciate-top:2.10.1"
 }
 
@@ -43,7 +42,7 @@ pluginBundle {
 gradlePlugin {
     plugins {
         simplePlugin {
-            id = pluginId
+            id = "enunciate"
             implementationClass = 'com.webcohesion.enunciate.gradle.EnunciatePlugin'
         }
     }

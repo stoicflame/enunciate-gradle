@@ -48,7 +48,9 @@ apply plugin: "com.webcohesion.enunciate"
 
 ## Enunciate Task
 
-The plugin adds a single task which runs Enunciate. It uses the main sources and compile classpath of the project when invoking Enunciate.
+The plugin adds a single task which runs Enunciate. It uses the main sources and the compileClasspath (or specified) classpath of the project when invoking Enunciate.
+
+The plugin also adds a configuration named `enunciate` where you can add additional enunciate module dependencies.
 
 The task can be configured with these options:
 
@@ -67,12 +69,18 @@ exclude(pattern) | Excludes files matching pattern from sources.
 include(pattern) | Includes files matching pattern from sources (implicitly excluding those that do not match).
 export(artifactId, destination) | Defines an artifact export (see https://github.com/stoicflame/enunciate/wiki/Artifacts). If the destination is a folder, the output is generated there. Otherwise the output is put in a zip file.
 sourcepath(Object...) | Adds additional source paths. The given paths are evaluated as per Project.files(Object...). 
+
 ## Example usage
 
 This will generate the documentation artifact and copy it to the dist/docs/api folder.
 
 ```
 apply plugin: "com.webcohesion.enunciate"
+
+dependencies {
+  // optionally add extra modules with:
+  // enunciate "group:artifact:version"
+}
 
 tasks.enunciate {
   File enunciateDistDir = file("dist/docs/api")
