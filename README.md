@@ -8,11 +8,9 @@ If you experience any issues with the plugin, please file and issue at github, h
 
 ## Applying the plugin
 
-The plugin has been compiled with Java 8, on Gradle 4.4.
+From version *2.11*, the plugin will be compiled with Java 8, on Gradle 4.4.
 
-So your build process needs to run on Java 8.
-
-The plugin may work on older versions of Gradle.
+So your build process needs to run on Java 8 with a 4.4+ version of Gradle.
 
 
 ### Gradle 2.1+
@@ -57,9 +55,14 @@ The task can be configured with these options:
 Option | Default value | Description
 -------|---------------|-------------
 buildDirName | enunciate | Enunciate's working directory, relative to Gradle's `buildDir`
-classpathConfigName | compileClasspath | This configuration's files are passed on as classpath to the Enunciate compilation.
 configFileName | src/main/enunciate/enunciate.xml	| Location of enunciate configuration file.
 extraJavacArgs | [] | Javac arguments. Arguments for source, target, encoding and bootstrapClasspath are added automatically.
+
+From version *2.11* there will be this additional option:
+
+Option | Default value | Description
+-------|---------------|-------------
+classpathConfigName | compileClasspath | This configuration's files are passed on as classpath to the Enunciate compilation.
 
 The task can be further configured with these methods:
 
@@ -78,7 +81,7 @@ This will generate the documentation artifact and copy it to the dist/docs/api f
 apply plugin: "com.webcohesion.enunciate"
 
 dependencies {
-  // optionally add extra modules with:
+  // From version 1.11 optionally add extra modules with:
   // enunciate "group:artifact:version"
 }
 
@@ -90,10 +93,4 @@ tasks.enunciate {
   }
   export("docs", enunciateDistDir)
 }
-```
-
-As a workaround for enunciate-gradle#5 you might want to add:
-
-```
-tasks.enunciate.doFirst { project.delete("build/enunciate") }
 ```
