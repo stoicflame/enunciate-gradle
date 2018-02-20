@@ -42,7 +42,7 @@ pluginBundle {
 gradlePlugin {
     plugins {
         simplePlugin {
-            id = "enunciate"
+            id = pluginId
             implementationClass = 'com.webcohesion.enunciate.gradle.EnunciatePlugin'
         }
     }
