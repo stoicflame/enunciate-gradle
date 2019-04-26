@@ -94,3 +94,36 @@ tasks.enunciate {
   export("docs", enunciateDistDir)
 }
 ```
+
+## Integrating Optional Modules
+
+### New Gradle (2.1+):
+
+```
+buildscript {
+  dependencies {
+    classpath "com.webcohesion.enunciate:enunciate-lombok:2.11.1"
+  }
+}
+
+plugins {
+  id "com.webcohesion.enunciate" version "2.11.1"
+}
+```
+
+### Old Gradle:
+```
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "gradle.plugin.com.webcohesion.enunciate:enunciate-gradle:2.11.1"
+    classpath "com.webcohesion.enunciate:enunciate-lombok:2.11.1"
+  }
+}
+
+apply plugin: "com.webcohesion.enunciate"
+```
