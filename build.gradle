@@ -1,5 +1,5 @@
 plugins {
-  id "com.gradle.plugin-publish" version "0.9.9"
+  id "com.gradle.plugin-publish" version "0.10.1"
   id 'java-gradle-plugin'
 }
 
@@ -15,8 +15,8 @@ repositories {
 }
 
 dependencies {
-	compile gradleApi()
-	compile "com.webcohesion.enunciate:enunciate-top:2.12.0"
+	implementation gradleApi()
+	implementation "com.webcohesion.enunciate:enunciate-top:2.12.0"
 }
 
 sourceCompatibility = "1.8"
