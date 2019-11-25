@@ -129,8 +129,9 @@ public class EnunciateTask extends DefaultTask {
 		classpathConfigName.set(configName);
 	}
 	
-	public String getClasspathConfigName() {
-		return classpathConfigName.get();
+	@Input
+	public Property<String> getClasspathConfigName() {
+		return classpathConfigName;
 	}
 
 	@InputFiles
@@ -177,7 +178,8 @@ public class EnunciateTask extends DefaultTask {
 	public void setExtraJavacArgs(List<String> extraJavacArgs) {
 		this.extraJavacArgs.set(extraJavacArgs);
 	}
-	
+
+	@Input
 	public Property<String> getBuildDirectoryName() {
 		return buildDirectoryName;
 	}
@@ -186,6 +188,7 @@ public class EnunciateTask extends DefaultTask {
 		buildDirectoryName.set(buildDirName);
 	}
 
+	@Input
 	public Property<String> getConfigurationFileName() {
 		return configurationFileName;
 	}

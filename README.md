@@ -8,9 +8,9 @@ If you experience any issues with the plugin, please file and issue at github, h
 
 ## Applying the plugin
 
-From version *2.11*, the plugin will be compiled with Java 8, on Gradle 4.4.
+From version *2.13*, the plugin will be compiled with Java 8, on Gradle 6+.
 
-So your build process needs to run on Java 8 with a 4.4+ version of Gradle.
+So your build process needs to run on Java 8 with a 6+ version of Gradle.
 
 
 ### Gradle 2.1+
@@ -58,7 +58,7 @@ buildDirName | enunciate | Enunciate's working directory, relative to Gradle's `
 configFileName | src/main/enunciate/enunciate.xml	| Location of enunciate configuration file.
 extraJavacArgs | [] | Javac arguments. Arguments for source, target, encoding and bootstrapClasspath are added automatically.
 
-From version *2.11* there will be this additional option:
+From version *2.11* there is this additional option:
 
 Option | Default value | Description
 -------|---------------|-------------
