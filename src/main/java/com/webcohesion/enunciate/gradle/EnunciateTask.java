@@ -24,23 +24,32 @@ import java.net.URLClassLoader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.ConfigurableFileCollection;
+import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
+import org.gradle.api.file.ProjectLayout;
+import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.logging.Logger;
+import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.plugins.JavaPluginConvention;
+import org.gradle.api.provider.ListProperty;
+import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
+import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.InputFile;
+import org.gradle.api.tasks.InputFiles;
+import org.gradle.api.tasks.OutputDirectories;
+import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.TaskCollection;
@@ -61,34 +70,55 @@ import com.webcohesion.enunciate.module.EnunciateModule;
  * @author Jesper Skov
  */
 public class EnunciateTask extends DefaultTask {
-	private String buildDirName = "enunciate";
-	private String configFileName = "src/main/enunciate/enunciate.xml";
-	private Property<String> classpathConfigName;
-	private Logger log;
-	private PatternFilterable filter = new PatternSet();
-	private Map<String, File> exports = new HashMap<>();
-	private SourceSet mainSourceSet;
-	private JavaPluginConvention javaPluginConvention;
-	private List<String> extraJavacArgs = new ArrayList<>();
-	private ConfigurableFileCollection sourcePath;
+	private final Logger log;
+	private final Property<String> buildDirectoryName;
+	private final DirectoryProperty buildDirectory;
+	private final Property<String> configurationFileName;
+	private final RegularFileProperty configurationFile;
+	private final Property<String> classpathConfigName;
+	private final JavaPluginConvention javaPluginConvention;
+	private final ListProperty<String> extraJavacArgs;
+	private final MapProperty<String, File> exports;
+	private final PatternFilterable filter = new PatternSet();
+	private final SourceSet mainSourceSet;
+	private final ConfigurableFileCollection sourcePath;
+	private final Property<FileTree> matchingSourceFiles;
 	private Configuration enunciateModuleConfiguration;
-	
+
 	public EnunciateTask() {
+		ObjectFactory of = getProject().getObjects();
+		ProjectLayout layout = getProject().getLayout();
+
 		log = getLogger();
 
-		classpathConfigName = getProject().getObjects().property(String.class);
-		classpathConfigName.set("compileClasspath");
+		buildDirectoryName = of.property(String.class)
+				.convention("enunciate");
+		buildDirectory = of.directoryProperty()
+				.convention(layout.getBuildDirectory().dir(buildDirectoryName));
+		configurationFileName = of.property(String.class)
+				.convention("src/main/enunciate/enunciate.xml");
+		configurationFile = of.fileProperty()
+				.convention(layout.getProjectDirectory().file(configurationFileName));
+		
+		classpathConfigName = of.property(String.class)
+				.convention("compileClasspath");
 		
 		javaPluginConvention = getProject().getConvention().findPlugin(JavaPluginConvention.class);
 
+		extraJavacArgs = of.listProperty(String.class);
+		exports = of.mapProperty(String.class, File.class);
+		
 		dependsOn(getProject().getTasks().getByName("classes"));
 		
 		mainSourceSet = javaPluginConvention.getSourceSets().findByName("main");
 		sourcePath = getProject().files();
-		
-		getInputs().files(lazyGetMatchingSourceFiles());
-		getInputs().file(lazyGetConfigFile());
-		getOutputs().dir(lazyGetBuildDir());
+
+		matchingSourceFiles = of.property(FileTree.class)
+			.convention(getProject().provider(() -> mainSourceSet.getAllJava().getAsFileTree().matching(filter)));
+	}
+
+	public void setEnunciateModuleConfig(Configuration configuration) {
+		enunciateModuleConfiguration = configuration;
 	}
 
 	public void setClasspathConfigName(Provider<String> configNameProvider) {
@@ -102,6 +132,11 @@ public class EnunciateTask extends DefaultTask {
 	public String getClasspathConfigName() {
 		return classpathConfigName.get();
 	}
+
+	@InputFiles
+	public Property<FileTree> getMatchingSourceFiles() {
+		return matchingSourceFiles;
+	}
 	
 	public void exclude(String pattern) {
 		filter.exclude(pattern);
@@ -111,51 +146,59 @@ public class EnunciateTask extends DefaultTask {
 		filter.include(pattern);
 	}
 	
+	@OutputDirectories
+	public MapProperty<String, File> getExports() {
+		return exports;
+	}
+	
 	public void export(String id, File destination) {
-		getOutputs().dir(destination);
 		exports.put(id, destination);
 	}
 
 	public void sourcepath(Object... sourcePaths) {
 		sourcePath.from(sourcePaths);
 	}
-	
-	public File getBuildDir() {
-		return new File(getProject().getBuildDir(), buildDirName);
+
+	@OutputDirectory
+	public DirectoryProperty getBuildDir() {
+		return buildDirectory;
 	}
 
-	public File getConfigFile() {
-		return getProject().file(configFileName);
+	@InputFile
+	public RegularFileProperty getConfigurationFile() {
+		return configurationFile;
 	}
 
-	public List<String> getExtraJavacArgs() {
+	@Input
+	public ListProperty<String> getExtraJavacArgs() {
 		return extraJavacArgs;
 	}
 
 	public void setExtraJavacArgs(List<String> extraJavacArgs) {
-		this.extraJavacArgs = extraJavacArgs;
+		this.extraJavacArgs.set(extraJavacArgs);
 	}
 	
-	public String getBuildDirName() {
-		return buildDirName;
+	public Property<String> getBuildDirectoryName() {
+		return buildDirectoryName;
 	}
 
 	public void setBuildDirName(String buildDirName) {
-		this.buildDirName = buildDirName;
+		buildDirectoryName.set(buildDirName);
 	}
 
-	public String getConfigFileName() {
-		return configFileName;
+	public Property<String> getConfigurationFileName() {
+		return configurationFileName;
 	}
 
 	public void setConfigFileName(String configFileName) {
-		this.configFileName = configFileName;
+		configurationFileName.set(configFileName);
 	}
 
 	@TaskAction
 	public void run() {
-		if (!getConfigFile().exists()) {
-			log.info("Enunciate task did nothing - did not find cofiguration file {}", getConfigFile());
+		File configFile = configurationFile.get().getAsFile();
+		if (!configFile.exists()) {
+			log.info("Enunciate task did nothing - did not find cofiguration file {}", configFile);
 		}
 		
 		List<URL> moduleUrls = enunciateModuleConfiguration.getFiles().stream()
@@ -183,27 +226,28 @@ public class EnunciateTask extends DefaultTask {
 	}
 
 	private void configureAndInvokeEnunciate() {
-		Set<File> inputFiles = getMatchingSourceFiles().getFiles();
+		Set<File> inputFiles = matchingSourceFiles.get().getFiles();
 		
 		Enunciate enunciate = new Enunciate();
 		enunciate.setLogger(new EnunciateLoggerBridge(log));
-		enunciate.setBuildDir(getBuildDir());
+		enunciate.setBuildDir(buildDirectory.get().getAsFile());
 		enunciate.setSourceFiles(inputFiles);
 		enunciate.setClasspath(getClasspathJars());
 		enunciate.getCompilerArgs().addAll(buildCompilerArgs(javaPluginConvention));
-		enunciate.getCompilerArgs().addAll(extraJavacArgs);
+		enunciate.getCompilerArgs().addAll(extraJavacArgs.get());
 		
 		ArrayList<File> sourcePathArg = new ArrayList<>(sourcePath.getFiles());
 		log.info("Adding sourcepath {}", sourcePathArg);
 		enunciate.setSourcepath(sourcePathArg);
 		
-		log.info("Using config {}", getConfigFile());
-		enunciate.loadConfiguration(getConfigFile());
-		enunciate.getConfiguration().setBase(getConfigFile().getParentFile());
+		File configFile = configurationFile.get().getAsFile();
+		log.info("Using config {}", configFile);
+		enunciate.loadConfiguration(configFile);
+		enunciate.getConfiguration().setBase(configFile);
 		
 		enunciate.loadDiscoveredModules();
 
-		for (Map.Entry<String, File> export : exports.entrySet()) {
+		for (Map.Entry<String, File> export : exports.get().entrySet()) {
 			log.info("Adding export {} : {}", export.getKey(), export.getValue());
 			enunciate.addExport(export.getKey(), export.getValue());
 		}
@@ -250,26 +294,5 @@ public class EnunciateTask extends DefaultTask {
 	private String getDefaultOrCompilerEncoding(CompileOptions compileOptions) {
 		String compilerEncoding = compileOptions != null ? compileOptions.getEncoding() : null;
 		return compilerEncoding == null ? Charset.defaultCharset().name() : compilerEncoding;
-	}
-	
-	
-	private FileTree getMatchingSourceFiles() {
-		return mainSourceSet.getAllJava().getAsFileTree().matching(filter);
-	}
-	
-	private Callable<FileTree> lazyGetMatchingSourceFiles() {
-		return this::getMatchingSourceFiles;
-	}
-
-	private Callable<File> lazyGetConfigFile() {
-		return this::getConfigFile;
-	}
-
-	private Callable<File> lazyGetBuildDir() {
-		return this::getBuildDir;
-	}
-
-	public void setEnunciateModuleConfig(Configuration configuration) {
-		enunciateModuleConfiguration = configuration;
 	}
 }
