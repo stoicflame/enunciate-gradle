@@ -70,6 +70,9 @@ import com.webcohesion.enunciate.module.EnunciateModule;
  * @author Jesper Skov
  */
 public class EnunciateTask extends DefaultTask {
+	// Copied from Enunciate Maven plugin
+	private static final List<String> VALID_CLASSPATH_TYPES = Arrays.asList("jar", "bundle", "eclipse-plugin", "ejb", "ejb-client");
+
 	private final Logger log;
 	private final Property<String> buildDirectoryName;
 	private final DirectoryProperty buildDirectory;
@@ -266,13 +269,21 @@ public class EnunciateTask extends DefaultTask {
 		}
 	}
 
-	// Filters out .pom files which may appear when BOMs are used
+	// Filters out files that are invalid in classpath context.
+	// An example is .pom files which may appear when BOMs are used.
 	private List<File> getClasspathJars() {
 		return getProject().getConfigurations().getByName(classpathConfigName.get())
 				.getFiles()
 				.stream()
-				.filter(f -> !f.getName().endsWith(".pom"))
+				.filter(this::isValidClasspathElement)
 				.collect(Collectors.toList());
+	}
+	
+	private boolean isValidClasspathElement(File f) {
+		String type = f.getName().replaceFirst(".*[.]", "").toLowerCase();
+		boolean include = f.isDirectory() || VALID_CLASSPATH_TYPES.contains(type);
+		log.debug("Include {} , type '{}' : {}", f.getName(), type, include);
+		return include;
 	}
 	
 	private List<String> buildCompilerArgs(JavaPluginConvention javaPluginConvention) {
