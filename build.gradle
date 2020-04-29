@@ -16,7 +16,7 @@ repositories {
 
 dependencies {
 	compile gradleApi()
-	compile "com.webcohesion.enunciate:enunciate-top:2.12.1"
+	compile "com.webcohesion.enunciate:enunciate-top:2.13.0"
 }
 
 sourceCompatibility = "1.8"
