@@ -249,7 +249,7 @@ public class EnunciateTask extends DefaultTask {
 		File configFile = configurationFile.get().getAsFile();
 		log.info("Using config {}", configFile);
 		enunciate.loadConfiguration(configFile);
-		enunciate.getConfiguration().setBase(configFile);
+		enunciate.getConfiguration().setBase(configFile.getParentFile());
 		
 		enunciate.loadDiscoveredModules();
 
