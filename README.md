@@ -19,7 +19,7 @@ Use the plugin mechanism to load the plugin:
 
 ```
 plugins {
-  id "com.webcohesion.enunciate" version "2.13.2"
+  id "com.webcohesion.enunciate" version "2.13.3"
 }
 ```
 
@@ -33,7 +33,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "gradle.plugin.com.webcohesion.enunciate:enunciate-gradle:2.13.2"
+    classpath "gradle.plugin.com.webcohesion.enunciate:enunciate-gradle:2.13.3"
   }
 }
 ```
@@ -102,12 +102,12 @@ tasks.enunciate {
 ```
 buildscript {
   dependencies {
-    classpath "com.webcohesion.enunciate:enunciate-lombok:2.13.2"
+    classpath "com.webcohesion.enunciate:enunciate-lombok:2.13.3"
   }
 }
 
 plugins {
-  id "com.webcohesion.enunciate" version "2.13.2"
+  id "com.webcohesion.enunciate" version "2.13.3"
 }
 ```
 
@@ -120,8 +120,8 @@ buildscript {
     }
   }
   dependencies {
-    classpath "gradle.plugin.com.webcohesion.enunciate:enunciate-gradle:2.13.2"
-    classpath "com.webcohesion.enunciate:enunciate-lombok:2.13.2"
+    classpath "gradle.plugin.com.webcohesion.enunciate:enunciate-gradle:2.13.3"
+    classpath "com.webcohesion.enunciate:enunciate-lombok:2.13.3"
   }
 }
 
