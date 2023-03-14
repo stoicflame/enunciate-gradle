@@ -16,13 +16,13 @@ repositories {
 
 dependencies {
 	implementation gradleApi()
-	implementation "com.webcohesion.enunciate:enunciate-top:2.14.0"
+	implementation "com.webcohesion.enunciate:enunciate-top:2.15.0"
 }
 
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
-version = "2.14.0"
+version = "2.15.0"
 group = "com.webcohesion.enunciate"
 
 gradlePlugin {
