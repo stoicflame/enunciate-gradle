@@ -8,40 +8,19 @@ If you experience any issues with the plugin, please file and issue at github, h
 
 ## Applying the plugin
 
-From version *2.13*, the plugin will be compiled with Java 8, on Gradle 6+.
+From version *2.17*, the plugin will be compiled with Java 17, on Gradle 6+.
 
-So your build process needs to run on Java 8 with a 6+ version of Gradle.
+So your build process needs to run on Java 17 with a 6+ version of Gradle.
 
 
-### Gradle 2.1+
+### Usage
 
 Use the plugin mechanism to load the plugin:
 
 ```
 plugins {
-  id "com.webcohesion.enunciate" version "2.16.1"
+  id "com.webcohesion.enunciate" version "2.17.0"
 }
-```
-
-### Older Gradle versions
-
-```
-buildscript {
-  repositories {
-    maven {
-      url "https://plugins.gradle.org/m2/"
-    }
-  }
-  dependencies {
-    classpath "gradle.plugin.com.webcohesion.enunciate:enunciate-gradle:2.16.1"
-  }
-}
-```
-
-To apply the plugin:
-
-```
-apply plugin: "com.webcohesion.enunciate"
 ```
 
 ## Enunciate Task
@@ -97,33 +76,14 @@ tasks.enunciate {
 
 ## Integrating Optional Modules
 
-### New Gradle (2.1+):
-
 ```
 buildscript {
   dependencies {
-    classpath "com.webcohesion.enunciate:enunciate-lombok:2.16.1"
+    classpath "com.webcohesion.enunciate:enunciate-lombok:2.17.0"
   }
 }
 
 plugins {
-  id "com.webcohesion.enunciate" version "2.16.1"
+  id "com.webcohesion.enunciate" version "2.17.0"
 }
-```
-
-### Old Gradle:
-```
-buildscript {
-  repositories {
-    maven {
-      url "https://plugins.gradle.org/m2/"
-    }
-  }
-  dependencies {
-    classpath "gradle.plugin.com.webcohesion.enunciate:enunciate-gradle:2.16.1"
-    classpath "com.webcohesion.enunciate:enunciate-lombok:2.16.1"
-  }
-}
-
-apply plugin: "com.webcohesion.enunciate"
 ```

@@ -1,5 +1,5 @@
 plugins {
-  id "com.gradle.plugin-publish" version "0.11.0"
+  id "com.gradle.plugin-publish" version "1.2.1"
   id 'java-gradle-plugin'
 }
 
@@ -16,33 +16,25 @@ repositories {
 
 dependencies {
 	implementation gradleApi()
-	implementation "com.webcohesion.enunciate:enunciate-top:2.16.1"
+	implementation "com.webcohesion.enunciate:enunciate-top:2.17.0"
 }
 
-sourceCompatibility = "1.8"
-targetCompatibility = "1.8"
+sourceCompatibility = "17"
+targetCompatibility = "17"
 
-version = "2.16.1"
+version = "2.17.0"
 group = "com.webcohesion.enunciate"
 
 gradlePlugin {
-    plugins {
-        enunciatePlugin {
-            id = pluginId
-            implementationClass = 'com.webcohesion.enunciate.gradle.EnunciatePlugin'
-        }
-    }
-}
-
-pluginBundle {
 	website = 'http://enunciate.webcohesion.com/'
 	vcsUrl = 'https://github.com/stoicflame/enunciate-gradle'
-	description = 'A gradle plugin for generating documentation with Enunciate'
-	tags = ['enunciate', 'documentation']
-
 	plugins {
 		enunciatePlugin {
+			id = 'com.webcohesion.enunciate'
+			implementationClass = 'com.webcohesion.enunciate.gradle.EnunciatePlugin'
 			displayName = 'Gradle Enunciate plugin'
+			description = 'Generate project documentation with Enunciate'
+			tags.set(['enunciate', 'documentation'])
 		}
 	}
 }
