@@ -19,7 +19,7 @@ Use the plugin mechanism to load the plugin:
 
 ```
 plugins {
-  id "com.webcohesion.enunciate" version "2.17.0"
+  id "com.webcohesion.enunciate" version "2.18.0"
 }
 ```
 
@@ -79,11 +79,11 @@ tasks.enunciate {
 ```
 buildscript {
   dependencies {
-    classpath "com.webcohesion.enunciate:enunciate-lombok:2.17.0"
+    classpath "com.webcohesion.enunciate:enunciate-lombok:2.18.0"
   }
 }
 
 plugins {
-  id "com.webcohesion.enunciate" version "2.17.0"
+  id "com.webcohesion.enunciate" version "2.18.0"
 }
 ```
