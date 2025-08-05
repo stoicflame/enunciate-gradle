@@ -24,7 +24,7 @@ java {
 	targetCompatibility = JavaVersion.VERSION_17
 }
 
-version = "2.19.0"
+version = "2.18.1"
 group = "com.webcohesion.enunciate"
 
 gradlePlugin {
