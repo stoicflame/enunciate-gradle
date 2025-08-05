@@ -38,7 +38,7 @@ public class EnunciatePlugin implements Plugin<Project> {
 
 		Configuration configuration = project.getConfigurations().maybeCreate("enunciate");
 		
-		EnunciateTask task = project.getTasks().create("enunciate", EnunciateTask.class);
+		EnunciateTask task = project.getTasks().register("enunciate", EnunciateTask.class).get();
 		task.setEnunciateModuleConfig(configuration);
 	}
 }
