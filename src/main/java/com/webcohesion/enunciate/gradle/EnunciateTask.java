@@ -40,7 +40,7 @@ import org.gradle.api.file.ProjectLayout;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.model.ObjectFactory;
-import org.gradle.api.plugins.JavaPluginConvention;
+import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
@@ -79,7 +79,7 @@ public class EnunciateTask extends DefaultTask {
 	private final Property<String> configurationFileName;
 	private final RegularFileProperty configurationFile;
 	private final Property<String> classpathConfigName;
-	private final JavaPluginConvention javaPluginConvention;
+	private final JavaPluginExtension javaPluginExtension;
 	private final ListProperty<String> extraJavacArgs;
 	private final MapProperty<String, File> exports;
 	private final PatternFilterable filter = new PatternSet();
@@ -105,15 +105,15 @@ public class EnunciateTask extends DefaultTask {
 		
 		classpathConfigName = of.property(String.class)
 				.convention("compileClasspath");
-		
-		javaPluginConvention = getProject().getConvention().findPlugin(JavaPluginConvention.class);
+
+		javaPluginExtension = getProject().getExtensions().findByType(JavaPluginExtension.class);
 
 		extraJavacArgs = of.listProperty(String.class);
 		exports = of.mapProperty(String.class, File.class);
 		
 		dependsOn(getProject().getTasks().getByName("classes"));
-		
-		mainSourceSet = javaPluginConvention.getSourceSets().findByName("main");
+
+		mainSourceSet = javaPluginExtension.getSourceSets().findByName("main");
 		sourcePath = getProject().files();
 
 		matchingSourceFiles = of.property(FileTree.class)
@@ -204,7 +204,7 @@ public class EnunciateTask extends DefaultTask {
 	public void run() {
 		File configFile = configurationFile.get().getAsFile();
 		if (!configFile.exists()) {
-			log.info("Enunciate task did nothing - did not find cofiguration file {}", configFile);
+			log.info("Enunciate task did nothing - did not find configuration file {}", configFile);
 		}
 		
 		List<URL> moduleUrls = enunciateModuleConfiguration.getFiles().stream()
@@ -239,7 +239,7 @@ public class EnunciateTask extends DefaultTask {
 		enunciate.setBuildDir(buildDirectory.get().getAsFile());
 		enunciate.setSourceFiles(inputFiles);
 		enunciate.setClasspath(getClasspathJars());
-		enunciate.getCompilerArgs().addAll(buildCompilerArgs(javaPluginConvention));
+		enunciate.getCompilerArgs().addAll(buildCompilerArgs(javaPluginExtension));
 		enunciate.getCompilerArgs().addAll(extraJavacArgs.get());
 		
 		ArrayList<File> sourcePathArg = new ArrayList<>(sourcePath.getFiles());
@@ -285,14 +285,15 @@ public class EnunciateTask extends DefaultTask {
 		log.debug("Include {} , type '{}' : {}", f.getName(), type, include);
 		return include;
 	}
-	
-	private List<String> buildCompilerArgs(JavaPluginConvention javaPluginConvention) {
+
+	private List<String> buildCompilerArgs(JavaPluginExtension javaPluginExtension) {
 		TaskCollection<JavaCompile> javaCompilers = getProject().getTasks().withType(JavaCompile.class);
 		CompileOptions firstCompilerOptions = javaCompilers.isEmpty() ? null : javaCompilers.iterator().next().getOptions();
-		
-		List<String> args = new ArrayList<>(Arrays.asList("-source", javaPluginConvention.getSourceCompatibility().toString(),
-							 							  "-target", javaPluginConvention.getTargetCompatibility().toString(),
-							 							  "-encoding", getDefaultOrCompilerEncoding(firstCompilerOptions)));
+
+        List<String> args = new ArrayList<>(Arrays.asList(
+                "-source", javaPluginExtension.getSourceCompatibility().toString(),
+                "-target", javaPluginExtension.getTargetCompatibility().toString(),
+                "-encoding", getDefaultOrCompilerEncoding(firstCompilerOptions)));
 
 		if (firstCompilerOptions != null) {
 			FileCollection bootClasspath = firstCompilerOptions.getBootstrapClasspath();
